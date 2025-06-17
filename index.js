@@ -18,7 +18,7 @@ app.options('*', cors());
 
 
 const mongoURI = 'mongodb+srv://050jrEt2VVOsD3WL:9%40eYE97T-dBqxMw@cluster0.zsgac.mongodb.net/';
-const dbName = 'test';
+const dbName = 'CNC_GENIE';
 
 // Function to fetch data from MongoDB based on the device number
 async function fetchDataByDevice(collectionName, deviceNo) {
