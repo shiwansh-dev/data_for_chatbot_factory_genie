@@ -364,7 +364,7 @@ app.post('/add_operator', async (req, res) => {
   // New GET API to fetch shiftwise data based on phone number
 app.get('/shiftwise_data_by_phone/:phone', async (req, res) => {
     const rawPhone = req.params.phone; // Example: 918800899174@c.us
-    const limit = parseInt(req.query.limit) || 50; // Default limit to 50 if not provided
+    const limit = parseInt(req.query.limit) ; // Default limit to 50 if not provided
 
     // Extract the last 10 digits from the phone input
     const match = rawPhone.match(/(\d{10})(?=@)/);
