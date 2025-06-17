@@ -17,7 +17,7 @@ app.use(express.json());
 app.options('*', cors());
 
 
-const mongoURI = 'mongodb+srv://shiwanshaggarwal2004:YPvS4SDJwKc59iUv@cluster0.ueomq.mongodb.net/';
+const mongoURI = 'mongodb+srv://050jrEt2VVOsD3WL:9%40eYE97T-dBqxMw@cluster0.zsgac.mongodb.net/';
 const dbName = 'test';
 
 // Function to fetch data from MongoDB based on the device number
