@@ -363,16 +363,8 @@ app.post('/add_operator', async (req, res) => {
   // });
   // New GET API to fetch shiftwise data based on phone number
 app.get('/shiftwise_data_by_phone/:phone', async (req, res) => {
-    const rawPhone = req.params.phone; // Example: 918800899174@c.us
-    const limit = parseInt(req.query.limit) ; // Default limit to 50 if not provided
-
-    // Extract the last 10 digits from the phone input
-    const match = rawPhone.match(/(\d{10})(?=@)/);
-    if (!match) {
-        return res.status(400).json({ error: 'Invalid phone format. Expected format like 918800899174@c.us' });
-    }
-
-    const tenDigitPhone = match[1]; // e.g., "8800899174"
+    const fullPhone = req.params.phone; // Example: 918800899174@c.us
+    const limit = parseInt(req.query.limit) || 50; // Default limit to 50 if not provided
 
     const client = new MongoClient(mongoURI, { connectTimeoutMS: 30000 });
 
@@ -382,18 +374,18 @@ app.get('/shiftwise_data_by_phone/:phone', async (req, res) => {
         const whatsappCollection = db.collection('whatsapp_message');
         const shiftwiseCollection = db.collection('shiftwise_data');
 
-        // Search in whatsapp_message for phone = tenDigitPhone
-        const whatsappDoc = await whatsappCollection.findOne({ phone: tenDigitPhone });
+        // Search in whatsapp_message using full phone format
+        const whatsappDoc = await whatsappCollection.findOne({ phone: fullPhone });
 
         if (!whatsappDoc) {
-            return res.status(404).json({ error: `Phone number ${tenDigitPhone} not found in whatsapp_message collection.` });
+            return res.status(404).json({ error: `Phone number ${fullPhone} not found in whatsapp_message collection.` });
         }
 
         const deviceno = whatsappDoc.deviceno;
 
         // Fetch shiftwise_data documents with matching deviceno, sort _id descending, and apply limit
         const shiftwiseData = await shiftwiseCollection.find({ deviceno: deviceno })
-            .sort({ _id: -1 }) // Sort by _id descending
+            .sort({ _id: -1 })
             .limit(limit)
             .toArray();
 
@@ -409,6 +401,7 @@ app.get('/shiftwise_data_by_phone/:phone', async (req, res) => {
         await client.close();
     }
 });
+
 
 
 
